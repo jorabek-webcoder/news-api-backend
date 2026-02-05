@@ -1,5 +1,5 @@
 const express = require("express");
-const { PORT } = require("./utils/secret");
+const { PORT, CORS_ORIGIN } = require("./utils/secret");
 const { mainRouter } = require("./routes");
 const { ConnectDB } = require("./utils/config.database");
 const { errorMiddleware } = require("./middlewares/error.middleware");
@@ -21,16 +21,20 @@ initCronJobs();
 
 app.use(helmet());
 
+const allowedOrigins = CORS_ORIGIN.split(",").map((origin) => origin.trim());
+
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000",
-      "http://localhost:3001",
-      "http://localhost:5173",
-      "http://localhost:5174",
-      "http://localhost:8989",
-      "https://news-api-backend-lt0e.onrender.com",
-    ],
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+      
+      if (allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
