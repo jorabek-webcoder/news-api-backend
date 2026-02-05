@@ -51,7 +51,6 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 app.use(express.static("public"));
 
-// Swagger documentation
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get("/", (req, res) => {
@@ -66,7 +65,6 @@ mainRouter.forEach((rItem) => {
   app.use(rItem.path, rItem.rout);
 });
 
-// 404 handler - Express 5 da boshqacha yoziladi
 app.use((req, res) => {
   throw new HttpException(
     StatusCodes.NOT_FOUND,
