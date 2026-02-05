@@ -24,10 +24,12 @@ app.use(helmet());
 app.use(
   cors({
     origin: [
-      `http://localhost:3000`,
-      `http://localhost:3001`,
-      `http://localhost:5173`,
-      `http://localhost:5174`,
+      "http://localhost:3000",
+      "http://localhost:3001",
+      "http://localhost:5173",
+      "http://localhost:5174",
+      "http://localhost:8989",
+      "https://news-api-backend-lt0e.onrender.com",
     ],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -54,10 +56,10 @@ app.use(express.static("public"));
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get("/", (req, res) => {
-  res.json({ 
-    success: true, 
+  res.json({
+    success: true,
     message: "API is running",
-    docs: "/api-docs"
+    docs: "/api-docs",
   });
 });
 
