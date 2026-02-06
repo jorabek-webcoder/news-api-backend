@@ -1,5 +1,13 @@
 const swaggerJsdoc = require("swagger-jsdoc");
 
+// Get current server URL dynamically
+const getServerUrl = () => {
+  if (process.env.NODE_ENV === "production" && process.env.RENDER_EXTERNAL_URL) {
+    return process.env.RENDER_EXTERNAL_URL;
+  }
+  return `http://localhost:${process.env.PORT || 8989}`;
+};
+
 const options = {
   definition: {
     openapi: "3.0.0",
@@ -10,8 +18,16 @@ const options = {
     },
     servers: [
       {
+        url: getServerUrl(),
+        description: "API Server",
+      },
+      {
         url: "http://localhost:8989",
-        description: "Development server",
+        description: "Local Development",
+      },
+      {
+        url: "https://news-api-backend-lt0e.onrender.com",
+        description: "Production (Render)",
       },
     ],
     components: {

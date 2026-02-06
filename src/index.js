@@ -28,6 +28,7 @@ app.use(
 
 const allowedOrigins = CORS_ORIGIN.split(",").map((origin) => origin.trim());
 
+
 app.use(
   cors({
     origin: function (origin, callback) {
@@ -36,12 +37,14 @@ app.use(
       if (allowedOrigins.indexOf(origin) !== -1) {
         return callback(null, true);
       }
-      
-      return callback(null, true);
+
+      console.log(`⚠️  CORS blocked origin: ${origin}`);
+      callback(new Error("Not allowed by CORS"));
     },
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
+    optionsSuccessStatus: 200,
   }),
 );
 
